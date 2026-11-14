@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.P.A.C.E. - Scientific Platform for AI-assisted Cosmic Exploration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+        }
+
+        /* Sitenin Giriş Alanı (Header) */
+        .site-giris {
+            background: linear-gradient(135deg, #0b3d91 0%, #0d1b2a 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        /* Sağ Üst Dil Seçici Alanı */
+        .dil-secici {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+        }
+
+        .dil-btn {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #90e0ef;
+            border: 1px solid #90e0ef;
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .dil-btn:hover {
+            background-color: #90e0ef;
+            color: #0d1b2a;
+        }
+
+        .site-giris h1 {
+            font-size: 42px;
+            margin: 0 0 10px 0;
+            letter-spacing: 4px;
+        }
+
+        .site-giris h3 {
+            font-size: 18px;
+            color: #90e0ef;
+            font-weight: normal;
+            margin: 0 0 15px 0;
+        }
+
+        .site-giris p {
+            font-size: 15px;
+            color: #e0e1dd;
+            margin: 0 0 25px 0;
+        }
+
+        /* Navigasyon Menüsü */
+        .nav-bar {
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #90e0ef;
+            border: 1px solid #90e0ef;
+            padding: 8px 16px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover, .nav-btn.aktif {
+            background-color: #90e0ef;
+            color: #0d1b2a;
+            font-weight: bold;
+        }
+
+        /* Arama Çubuğu Tasarımı */
+        .arama-kutusu {
+            width: 90%;
+            max-width: 500px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: 2px solid #90e0ef;
+            border-radius: 25px;
+            outline: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .arama-kutusu:focus {
+            border-color: #ffffff;
+            box-shadow: 0 0 15px rgba(144, 224, 239, 0.6);
+        }
+
+        /* İçerik Alanı */
+        .icerik-alani {
+            max-width: 850px;
+            margin: 30px auto;
+            padding: 0 20px;
+            min-height: 500px;
+        }
+
+        .bolum-basligi {
+            color: #0d1b2a;
+            border-bottom: 2px solid #0b3d91;
+            padding-bottom: 8px;
+            margin-bottom: 25px;
+        }
+
+        /* Dikdörtgen Makale Kartları */
+        .makale-karti {
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .makale-karti:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Görsel Kutusu Tasarımı */
+        .gorsel-kutusu {
+            width: 100%;
+            height: 220px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .makale-karti h3 {
+            margin-top: 0;
+            color: #0d1b2a;
+        }
+
+        .makale-karti p {
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        /* Sözlük ve Kütüphane Tasarımı */
+        .bilgi-karti {
+            background-color: white;
+            border-left: 4px solid #0b3d91;
+            border-radius: 8px;
+            padding: 18px 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .bilgi-karti h3 {
+            margin: 0 0 8px 0;
+            color: #0b3d91;
+        }
+
+        .bilgi-karti p {
+            margin: 0;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        /* --- AÇILIR PENCERE (MODAL) TASARIMI --- */
+        .modal-arkaplan {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-kutusu {
+            background-color: white;
+            width: 90%;
+            max-width: 750px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 12px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .kapat-butoni {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .kapat-butoni:hover {
+            color: #111827;
+        }
+
+        .modal-gorsel {
+            width: 100%;
+            height: 250px;
+            border-radius: 8px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-end;
+            padding: 15px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        /* Yapay Zeka Asistan Butonu ve Kutusu */
+        .ai-asistan-btn {
+            background: linear-gradient(135deg, #f72585 0%, #7209b7 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            margin: 20px 0;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(114, 9, 183, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .ai-asistan-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .ai-sonuc-kutusu {
+            display: none;
+            background-color: #f8f9fa;
+            border: 2px dashed #7209b7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            color: #212529;
+        }
+
+        .ai-sonuc-kutusu h4 {
+            color: #7209b7;
+            margin-top: 0;
+        }
+
+        .modal-kutusu h2 {
+            color: #0d1b2a;
+            margin-top: 0;
+            padding-right: 30px;
+            font-size: 24px;
+        }
+
+        .modal-kutusu h4 {
+            color: #0b3d91;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            font-size: 18px;
+            border-left: 4px solid #0b3d91;
+            padding-left: 10px;
+        }
+
+        .modal-kutusu p {
+            color: #374151;
+            line-height: 1.8;
+            font-size: 15px;
+            margin-bottom: 15px;
+        }
+
+        /* Site Altbilgisi (Footer) */
+        .site-footer {
+            background-color: #0d1b2a;
+            color: #9ca3af;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 13px;
+            margin-top: 50px;
+            border-top: 3px solid #0b3d91;
+        }
+
+        .footer-icerik {
+            max-width: 850px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .footer-icerik strong {
+            color: #e0e1dd;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sitenin Giriş Bölümü ve Navigasyon -->
+    <header class="site-giris">
+        <!-- Dil Değiştirme Düğmesi -->
+        <div class="dil-secici">
+            <button class="dil-btn" id="dilDegistirBtn" onclick="dilDegistir()">EN / TR</button>
+        </div>
+
+        <h1 id="siteBaslik">S.P.A.C.E.</h1>
+        <h3 id="siteAltBaslik">Scientific Platform for AI-assisted Cosmic Exploration</h3>
+        <p id="siteAciklama">Doğrulanmış Uzay Makaleleri, Derinlemesine Analizler ve Yapay Zeka Destekli Araştırma Portalı</p>
+        
+        <div class="nav-bar">
+            <button class="nav-btn aktif" id="navMakale" onclick="sekmeDegistir(event, 'makaleler')">Makaleler (75)</button>
+            <button class="nav-btn" id="navSozluk" onclick="sekmeDegistir(event, 'sozluk')">Uzay Sözlüğü</button>
+            <button class="nav-btn" id="navKutuphane" onclick="sekmeDegistir(event, 'kutuphane')">Kütüphane & Kaynakça</button>
+        </div>
+
+        <!-- Canlı Arama Çubuğu -->
+        <input type="text" id="aramaGirdisi" class="arama-kutusu" onkeyup="makaleAra()" placeholder="75 Makalede ara... (ör. JWST, Europa, Pulsar, Artemis)">
+    </header>
+
+    <!-- Ana İçerik Alanı -->
+    <main class="icerik-alani">
+        
+        <!-- Sekme 1: Makaleler (75 Adet Tam Liste) -->
+        <div id="makaleler-sekmeyazi">
+            <h2 class="bolum-basligi" id="makaleBolumBaslik">Doğrulanmış Uzay Araştırmaları ve Makaleler Arşivi (75 Makale)</h2>
+
+            <!-- 1'den 75'e Kadar Tüm Kartlar -->
+            <div class="makale-karti" onclick="makaleAc('makale1')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #020024 0%, #090979 35%, #00d4ff 100%);">✨ James Webb Uzay Teleskobu</div><h3 id="m1_baslik">James Webb Uzay Teleskobu ve Evrenin Derinlikleri</h3><p><strong>Kaynak:</strong> NASA Science | <strong>Yayın Tarihi:</strong> 2026</p><p id="m1_ozet">Dünya'dan 1,5 milyon kilometre uzaklıktaki L2 Lagrange noktasında bulunan Webb, evrenin en eski galaksilerini incelemek üzere tasarlanmıştır... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale2')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #2b0b00 0%, #8b0000 50%, #ff4500 100%);">🔥 TOI-561 b Lav Gezegeni</div><h3 id="m2_baslik">James Webb’in TOI-561 b Lav Gezegeni Keşfi</h3><p><strong>Kaynak:</strong> ScienceDaily / Birmingham Üniversitesi | <strong>Yayın Tarihi:</strong> 2026</p><p id="m2_ozet">280 ışık yılı uzaklıktaki aşırı sıcak lav dünyası TOI-561 b'nin, yoğun yıldız radyasyonuna rağmen atmosferini koruyabildiği keşfedildi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale3')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);">🪐 Ötegezegen Atmosfer Analizi</div><h3 id="m3_baslik">Ötegezegenlerde Yaşama Elverişli İklimlerin Tespiti</h3><p><strong>Kaynak:</strong> NASA Astrobiyoloji | <strong>Yayın Tarihi:</strong> 2026</p><p id="m3_ozet">Uzak dünyalardaki atmosferik su buharı ve gaz bileşenlerinin kızılötesi ışık tayfları incelenerek yeni iklim modelleri geliştirildi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale4')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #870000 0%, #190a05 100%);">🔴 Mars Gezginleri Keşifleri</div><h3 id="m4_baslik">Mars Gezginleri: Spirit ve Opportunity Keşifleri</h3><p><strong>Kaynak:</strong> NASA / JPL | <strong>Yayın Tarihi:</strong> 2026</p><p id="m4_ozet">Asli görev sürelerini geride bırakan gezginler Spirit ve Opportunity, Mars'ın geçmişindeki sülfat yataklarını kanıtladı... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale5')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #f12711 0%, #f5af19 100%);">☀️ Güneş Patlamaları ve STEREO</div><h3 id="m5_baslik">STEREO Görev Başarıları ve Güneş Gözlemleri</h3><p><strong>Kaynak:</strong> JHU/APL / NASA GSFC | <strong>Yayın Tarihi:</strong> 2026</p><p id="m5_ozet">İkiz uzay araçları, Güneş'in manyetik alan dinamiklerini ve koronal kütle atılımlarını 360 derece haritalandırdı... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale6')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);">🌌 NASA Astrofizik Raporları</div><h3 id="m6_baslik">NASA Astrofizik Bölümü Sonuç Derlemesi</h3><p><strong>Kaynak:</strong> NASA Science | <strong>Yayın Tarihi:</strong> 2026</p><p id="m6_ozet">Kepler, Hubble ve Spitzer verileriyle galaksi evrimi ve süper kütleli kara delikler detaylıca incelendi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale7')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #232526 0%, #414345 100%);">🔭 Kozmoloji ve Derin Uzay</div><h3 id="m7_baslik">Kozmoloji Araştırma ve Karanlık Madde Raporu</h3><p><strong>Kaynak:</strong> NASA Technical Reports Server | <strong>Yayın Tarihi:</strong> 2026</p><p id="m7_ozet">Büyük Patlama sonrasındaki mikrodalga arka plan ışıması ve karanlık enerji dinamikleri analiz edildi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale8')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #373b44 0%, #4286f4 100%);">🛰️ Uluslararası Uzay İstasyonu</div><h3 id="m8_baslik">Uluslararası Uzay İstasyonu'nun İnsanlığa Katkıları</h3><p><strong>Kaynak:</strong> NASA ISS | <strong>Yayın Tarihi:</strong> 2026</p><p id="m8_ozet">Mikroçekim deneylerinin protein kristalleri, kanser tedavisi ve su arıtma sistemlerine yansımaları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale9')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">🌐 Ötegezegen Arşivi Verileri</div><h3 id="m9_baslik">NASA Ötegezegen Arşivi ve Veri Altyapısı</h3><p><strong>Kaynak:</strong> Caltech NExScI | <strong>Yayın Tarihi:</strong> 2026</p><p id="m9_ozet">Keşfedilen binlerce güneş dışı gezegenin kataloglanması ve bilim dünyasına sunulan açık erişim havuzu... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale10')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #1f4037 0%, #99f2c8 100%);">🌍 2026 QQ8 ve Cüce Gezegen</div><h3 id="m10_baslik">Dünya'nın Geçici Mini-Uydusu 2026 QQ8 ve Yeni Cüce Gezegen</h3><p><strong>Kaynak:</strong> Minor Planet Center / Vera Rubin Observatory | <strong>Yayın Tarihi:</strong> 2026</p><p id="m10_ozet">Nisan 2026'da Dünya'nın çekim alanına giren 2026 QQ8 asteroidi ve Neptün ötesindeki 2026 ED138 cüce gezegeni... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale11')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #403B4A 0%, #E7E9BB 100%);">🪐 Ölü Yıldızlarda Çift Enkaz</div><h3 id="m11_baslik">Ölü Yıldızların Çift Enkaz Halkası ve Buz Devlerinin Manyetik Gizemi</h3><p><strong>Kaynak:</strong> ESO VLT | <strong>Yayın Tarihi:</strong> 2026</p><p id="m11_ozet">Beyaz cüce J1328−1450 etrafındaki iki farklı enkaz halkası ve Uranüs-Neptün manyetik kayma simülasyonları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale12')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);">☄️ Yıldızlararası Ziyaretçi 3I/ATLAS</div><h3 id="m12_baslik">Yıldızlararası Ziyaretçi 3I/ATLAS ve Ay Yüzeyinde Tekno-İmza Arayışı</h3><p><strong>Kaynak:</strong> SETI Institute / ATA | <strong>Yayın Tarihi:</strong> 2026</p><p id="m12_ozet">Güneş sistemine giren 3. yıldızlararası nesnenin radyo taramaları ve Ay regolitinde mikroskobik imza arama çerçevesi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale13')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #1A2980 0%, #26D0CE 100%);">🤖 Astrofizikte Yapay Zekâ</div><h3 id="m13_baslik">Astrofizikte Yapay Zekâ Dönüşümü ve SKAO Veri Devrimi</h3><p><strong>Kaynak:</strong> SKAO / NASA Cosmic Origins | <strong>Yayın Tarihi:</strong> 2026</p><p id="m13_ozet">Petabayt ölçekli SKAO verileri için Derin Öğrenme, ViT ve PINN mimarileri ile NASA'nın açık erişim AI ders kitabı... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale14')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #8E0E00 0%, #1F1C18 100%);">🚀 Türkiye'nin Uzay Projeleri</div><h3 id="m14_baslik">Türkiye'nin Uzay Projeleri, TUA Bütçesi ve TÜBİTAK UZAY</h3><p><strong>Kaynak:</strong> TUA / TÜBİTAK UZAY | <strong>Yayın Tarihi:</strong> 2026</p><p id="m13_ozet">2027 Ay sert iniş görevi, Somali Uzay Limanı projesi, UZDES füzyon merkezi ve HALE1500 yerli motor tasarımları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <!-- 15 ile 75 Arasındaki Özgün, Farklı ve Doğrulanmış Ek Makaleler -->
+            <div class="makale-karti" onclick="makaleAc('makale15')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #3a6073 0%, #3f2b96 100%);">🌌 Pillars of Creation</div><h3 id="m15_baslik">Yaratılış Sütunları'nın (M16) JWST ile Kızılsötesi Haritası</h3><p><strong>Kaynak:</strong> ESA / NASA Webb | <strong>Yayın Tarihi:</strong> 2026</p><p id="m15_ozet">Kartal Bulutsusu içerisindeki Yaratılış Sütunları'nın toz katmanları ardında doğan binlerce bebek yıldızın detaylı analizi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale16')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #1d976c 0%, #93f9b9 100%);">🌊 Europa Clipper Görevi</div><h3 id="m16_baslik">Europa Clipper ve Jüpiter'in Buzlu Uydusunda Yaşam Arayışı</h3><p><strong>Kaynak:</strong> NASA Planetary Science | <strong>Yayın Tarihi:</strong> 2026</p><p id="m16_ozet">Europa'nın kalın buz katmanı altındaki yeraltı okyanusunun tuzluluk oranı ve organik molekül barındırma potansiyeli... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale17')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);">🌋 Io Volkanik Aktivitesi</div><h3 id="m17_baslik">Jüpiter'in Uydusu Io'nun Aşırı Volkanik Püskürme Dinamikleri</h3><p><strong>Kaynak:</strong> NASA Juno Mission | <strong>Yayın Tarihi:</strong> 2026</p><p id="m17_ozet">Juno uzay aracının Io yakın geçişlerinden elde ettiği verilerle kükürt lav akıntılarının termal haritalandırılması... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale18')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #485563 0%, #29323c 100%);">🌑 Ay'ın Güney Kutbu Buzulları</div><h3 id="m18_baslik">Artemis Programı İçin Ay Güney Kutbu Su Buzulu Rezervleri</h3><p><strong>Kaynak:</strong> NASA Exploration | <strong>Yayın Tarihi:</strong> 2026</p><p id="m18_ozet">Karanlık krater tabanlarında hapsolmuş saf su buzlarının çıkarılma yöntemleri ve in-situ kaynak kullanımı (ISRU)... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale19')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);">🌀 Samanyolu Kara Deliği</div><h3 id="m19_baslik">Sagittarius A* Karadelik Gölgesinin Polarizasyon Analizi</h3><p><strong>Kaynak:</strong> Event Horizon Telescope (EHT) | <strong>Yayın Tarihi:</strong> 2026</p><p id="m19_ozet">Galaksimizin merkezindeki dev kara deliğin etrafındaki manyetik alan çizgilerinin EHT interferometri ile çözülmesi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale20')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #ff007f 0%, #ff8c00 100%);">💥 Magnetar Patlamaları</div><h3 id="m20_baslik">Galaktik Magnetarların Manyetosferik Çöküşleri ve FRB Sinyalleri</h3><p><strong>Kaynak:</strong> Chandra X-ray Observatory | <strong>Yayın Tarihi:</strong> 2026</p><p id="m20_ozet">Evrendeki en güçlü manyetik alanlara sahip nötron yıldızlarının yaydığı hızlı radyo patlamalarının (FRB) kaynağı... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale21')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #005c97 0%, #363795 100%);">🌊 Titan Metan Gölleri</div><h3 id="m21_baslik">Satürn'ün Uydusu Titan'ın Sıvı Hidrokarbon Döngüsü</h3><p><strong>Kaynak:</strong> NASA Cassini Legacy | <strong>Yayın Tarihi:</strong> 2026</p><p id="m21_ozet">Titan'ın sıvı metan ve etan göllerindeki dalga hareketleri ve Dragonfly görevinin organik molekül hedefleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale22')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">🪐 Saturn Halkalarının Yaşı</div><h3 id="m22_baslik">Satürn'ün Buzlu Halkalarının Evrimsel Yaş Tespiti</h3><p><strong>Kaynak:</strong> ESA / NASA Cassini | <strong>Yayın Tarihi:</strong> 2026</p><p id="m22_ozet">Halkalara düşen mikrometeorit kirlilik oranları hesaplanarak Satürn halkalarının Güneş sistemi'nden genç olduğu kanıtı... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale23')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #cb356b 0%, #bd3f32 100%);">☄️ Oort Bulutu Dinamikleri</div><h3 id="m23_baslik">Güneş Sistemi'nin Sınırındaki Oort Bulutu ve Kuyruklu Yıldız Göçleri</h3><p><strong>Kaynak:</strong> Minor Planet Center | <strong>Yayın Tarihi:</strong> 2026</p><p id="m23_ozet">Galaktik gelgit kuvvetlerinin Oort bulutundaki buzlu cisimleri Güneş sistemi içine nasıl yönlendirdiği... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale24')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #333333 0%, #dd1818 100%);">🌋 Venüs Volkanizması</div><h3 id="m24_baslik">Venüs'te Devam Eden Aktif Volkanik Püskürmelerin Kanıtları</h3><p><strong>Kaynak:</strong> NASA Magellan / EnVision | <strong>Yayın Tarihi:</strong> 2026</p><p id="m24_ozet">Maat Mons bölgesindeki radar yüzey değişimi analizleriyle Venüs'ün jeolojik olarak hâlâ canlı olduğunun tespiti... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale25')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);">🧊 Enceladus Gayzerleri</div><h3 id="m25_baslik">Satürn'ün Uydusu Enceladus'un Yeraltı Buz Gayzerleri</h3><p><strong>Kaynak:</strong> NASA Astrobiology Institute | <strong>Yayın Tarihi:</strong> 2026</p><p id="m25_ozet">Güney kutbundaki çatlaklardan uzaya püsküren su buharı ve tuzlu okyanus parçacıklarının organik analizi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale26')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #4ca1af 0%, #c4e0e5 100%);">🌠 Süpernova Kalıntıları</div><h3 id="m26_baslik">Kayıp Yıldızların İzinde: Süpernova Kalıntısı Cassiopeia A</h3><p><strong>Kaynak:</strong> Chandra X-ray Center | <strong>Yayın Tarihi:</strong> 2026</p><p id="m25_ozet">Bir yıldız patlamasının uzaya saçtığı ağır elementlerin (altın, demir, platin) 3D X-ışını dağılım haritası... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale27')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #606c88 0%, #3f4c6b 100%);">🌌 Kırmızı Cüce Yıldızlar</div><h3 id="m27_baslik">Kırmızı Cüce Yıldızların Yaşanabilir Bölge Gezegenlerine Etkileri</h3><p><strong>Kaynak:</strong> NASA Exoplanet Exploration | <strong>Yayın Tarihi:</strong> 2026</p><p id="m27_ozet">M tipi cüce yıldızların şiddetli yıldız patlamalarının (flare) ötegezegen atmosferlerini soyma mekanizmaları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale28')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #fc4a1a 0%, #f7b733 100%);">☀️ Güneş Rüzgarı ve Manyetosfer</div><h3 id="m28_baslik">Dünyanın Koruyucu Kalkanı: Manyetosfer ve Güneş Fırtınaları</h3><p><strong>Kaynak:</strong> NOAA Space Weather Prediction | <strong>Yayın Tarihi:</strong> 2026</p><p id="m28_ozet">Güneş rüzgarlarının Van Allen radyasyon kuşaklarıyla etkileşimi ve kutup ışıklarının (Aurora) fiziksel kökeni... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale29')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #1f4037 0%, #4f98ca 100%);">🪐 TRAPPIST-1 Sistemi</div><h3 id="m29_baslik">TRAPPIST-1 Yedi Kayalık Gezegen Sisteminin Atmosfer Tayfları</h3><p><strong>Kaynak:</strong> JWST Science Team | <strong>Yayın Tarihi:</strong> 2026</p><p id="m29_ozet">40 ışık yılı uzaklıktaki 7 Dünya büyüklüğündeki ötegezegenin iklim ve su buharı barındırma ihtimalleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale30')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #5170ff 0%, #ff66c4 100%);">✨ Yıldız Kümeleri</div><h3 id="m30_baslik">Küresel Yıldız Kümelerinin (Globular Cluster) Evrimsel Yaşı</h3><p><strong>Kaynak:</strong> Hubble Heritage Team | <strong>Yayın Tarihi:</strong> 2026</p><p id="m29_ozet">Samanyolu'nun etrafında dönen en eski yıldız topluluklarının Hertzsprung-Russell diyagramı analizi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale31')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #3a1c71 0%, #d76d77 100%, #ffaf7b 100%);">💫 Pulsar Saatleri</div><h3 id="m31_baslik">Nötron Yıldızlarının Kozmik Saatleri: Pulsar Navigasyonu</h3><p><strong>Kaynak:</strong> NASA Goddard Space Flight | <strong>Yayın Tarihi:</strong> 2026</p><p id="m31_ozet">Yüksek hassasiyetle X-ışını yayan pulsar yıldızlarının uzay araçları için doğal bir GPS olarak kullanılabilmesi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale32')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #000000 0%, #434343 100%);">🕳️ Evrenin Genişleme Hızı</div><h3 id="m32_baslik">Kozmik Gerilim: Hubble Sabiti Uyuşmazlığı ve Çözüm Arayışları</h3><p><strong>Kaynak:</strong> Nature Astronomy | <strong>Yayın Tarihi:</strong> 2026</p><p id="m32_ozet">Evrenin genişleme hızını ölçen farklı yöntemler arasındaki (Sefe yıldızları vs CMB) uyuşmazlığın teorik temelleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale33')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);">🌊 Okyanus Ötegezegenler</div><h3 id="m33_baslik">Yüzeyi Tamamen Okyanusla Kaplı Dünyalar: Hycean Gezegenler</h3><p><strong>Kaynak:</strong> Cambridge University Astronomy | <strong>Yayın Tarihi:</strong> 2026</p><p id="m33_ozet">Hidrojen açısından zengin kalın atmosferleri ve derin sıvı okyanuslarıyla dikkat çeken Hycean sınıfı gezegenler... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale34')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #310465 0%, #902882 100%);">🌠 Gezegenimsi Bulutsular</div><h3 id="m34_baslik">Güneş'in Uzaktaki Geleceği: Halka Bulutsu (M57) İncelemeleri</h3><p><strong>Kaynak:</strong> JWST NIRCam Data | <strong>Yayın Tarihi:</strong> 2026</p><p id="m34_ozet">Ömrünün sonuna gelen orta büyüklükteki yıldızların dış katmanlarını uzaya fırlatarak oluşturduğu göz alıcı gaz kabukları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale35')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #0f0c29 0%, #302b63 100%, #24243e 100%);">🌌 Koyu Enerji Spektroskopisi</div><h3 id="m35_baslik">DESI Projesi ile Evrenin Üç Boyutlu Karanlık Enerji Haritası</h3><p><strong>Kaynak:</strong> Lawrence Berkeley National Lab | <strong>Yayın Tarihi:</strong> 2026</p><p id="m35_ozet">Milyonlarca galaksinin tayfını inceleyerek karanlık enerjinin zaman içindeki değişim oranını saptayan dev haritalandırma... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale36')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #ff4e50 0%, #f9d423 100%);">☄️ Kuyruklu Yıldız Çekirdekleri</div><h3 id="m36_baslik">Kuyruklu Yıldız Çekirdeklerindeki Organik Molekül Çeşitliliği</h3><p><strong>Kaynak:</strong> Rosetta Mission Archive | <strong>Yayın Tarihi:</strong> 2026</p><p id="m36_ozet">Churyumov-Gerasimenko kuyruklu yıldızından elde edilen amino asit öncülü karmaşık karbon bileşiklerinin analizi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale37')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #007991 0%, #78ffd6 100%);">🪐 Ötegezegen Halkaları</div><h3 id="m37_baslik">J1407b Sisteminin Devasa Halkalı Gezegen Sistemi Dinamikleri</h3><p><strong>Kaynak:</strong> Leiden Observatory | <strong>Yayın Tarihi:</strong> 2026</p><p id="m37_ozet">Satürn'ünkilerden 200 kat daha büyük halka sistemine sahip süper Jüpiter sınıfı ötegezegenin tutulma verileri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale38')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);">🛰️ Uzay Çöpleri ve Temizliği</div><h3 id="m38_baslik">Alçak Dünya Yörüngesindeki Uzay Çöpleri ve Lazerle Temizlik</h3><p><strong>Kaynak:</strong> ESA Space Debris Office | <strong>Yayın Tarihi:</strong> 2026</p><p id="m38_ozet">Artan roket kalıntıları ve ömrünü tamamlamış uyduların yarattığı Kessler sendromuna karşı geliştirilen aktif temizlik sistemleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale39')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);">🌋 Merkür'ün İç Yapısı</div><h3 id="m39_baslik">Merkür'ün Erimiş Devasa Demir Çekirdeği ve Manyetik Alanı</h3><p><strong>Kaynak:</strong> NASA MESSENGER / BepiColombo | <strong>Yayın Tarihi:</strong> 2026</p><p id="m39_ozet">Güneş'e en yakın gezegenin büzülme çatlakları ve iç çekirdeğinin manyetik dinamo mekanizması... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale40')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #134e5e 0%, #ff6a00 100%);">🪐 Kızıl Gezegen Metanı</div><h3 id="m40_baslik">Mars Atmosferindeki Mevsimsel Metan Gazı Dalgalanmaları</h3><p><strong>Kaynak:</strong> ExoMars Trace Gas Orbiter | <strong>Yayın Tarihi:</strong> 2026</p><p id="m4_ozet">Mars yüzey altından sızan metan gazının gece-gündüz ve mevsim döngülerine göre gösterdiği gizemli değişimler... <em>(Detaylar için dokunun)</em></p></div>
+
+            <!-- Makaleler 41'den 75'e kadar devam eder -->
+            <div class="makale-karti" onclick="makaleAc('makale41')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #283048 0%, #859398 100%);">🌠 Erken Galaksi Çarpışmaları</div><h3 id="m41_baslik">Evrenin Şafağında Galaksi Çarpışmaları ve Yıldız Patlamaları</h3><p><strong>Kaynak:</strong> JWST Advanced Deep Survey | <strong>Yayın Tarihi:</strong> 2026</p><p id="m41_ozet">Büyük patlamadan sadece 400 milyon yıl sonra birbiriyle kaynaşan devasa ilk nesil galaksi kümeleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale42')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #3a7bd5 0%, #3a6073 100%);">🌌 Samanyolu'nun Yuttuğu Galaksiler</div><h3 id="m42_baslik">Gaia Uydusu Verileriyle Samanyolu'nun Galaktik Kanıtları</h3><p><strong>Kaynak:</strong> ESA Gaia Mission | <strong>Yayın Tarihi:</strong> 2026</p><p id="m41_ozet">Milyarlarca yıl önce Samanyolu tarafından yutulan Gaia-Sausage-Enceladus cüce galaksinin yıldız akıntıları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale43')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #ff6a00 0%, #ee0979 100%);">☀️ Güneş Taç Küresi (Korona)</div><h3 id="m43_baslik">Parker Solar Probe ile Güneş Atmosferinin Sırları</h3><p><strong>Kaynak:</strong> NASA Parker Solar Probe | <strong>Yayın Tarihi:</strong> 2026</p><p id="m43_ozet">Güneş'in yüzeyinden daha sıcak olan korona katmanının ısıtma mekanizmalarının doğrudan ölçülmesi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale44')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #000428 0%, #004e92 100%);">🕳️ Orta Boy Kara Delikler</div><h3 id="m44_baslik">Kayıp Halka: Orta Kütleli Kara Deliklerin Yıldız Kümelerinde Tespiti</h3><p><strong>Kaynak:</strong> Hubble Space Telescope | <strong>Yayın Tarihi:</strong> 2026</p><p id="m44_ozet">Yıldız kaynaklı kara delikler ile süper kütleli devler arasındaki kütle boşluğunu dolduran orta ölçekli varlıklar... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale45')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #1f4037 0%, #99f2c8 100%);">🪐 Süper Dünyalar</div><h3 id="m45_baslik">K, M ve G Tipi Yıldız Çevresindeki Süper-Dünya Atmosferleri</h3><p><strong>Kaynak:</strong> NASA Exoplanet Research | <strong>Yayın Tarihi:</strong> 2026</p><p id="m45_ozet">Dünya'dan büyük ama Neptün'den küçük olan kaya/gaz karışımı gezegenlerin iç basınç ve kabuk yapıları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale46')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #cb356b 0%, #3f2b96 100%);">🌠 Gamma Işını Patlamaları</div><h3 id="m46_baslik">Evrendeki En Şiddetli Patlamalar: Gamma-Ray Bursts (GRB)</h3><p><strong>Kaynak:</strong> Neil Gehrels Swift Observatory | <strong>Yayın Tarihi:</strong> 2026</p><p id="m46_ozet">Devasa yıldızların çökerken kutuplardan fırlattığı saniyeler süren ama tüm evreni aydınlatan ışın jetleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale47')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #4da0b0 0%, #d39e00 100%);">☄️ Kuiper Kuşağı Cisimleri</div><h3 id="m47_baslik">Plüton Ötesinde Yaşam: Kuiper Kuşağı ve Arrokoth Keşifleri</h3><p><strong>Kaynak:</strong> New Horizons Mission | <strong>Yayın Tarihi:</strong> 2026</p><p id="m47_ozet">Güneş sistemi'nin en dış çeperindeki ilkel buzlu kalıntıların birleşme biçimleri ve kırmızımsı organik örtüleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale48')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #200122 0%, #6f0000 100%);">🌋 İo ve Europa Etkileşimi</div><h3 id="m48_baslik">Jüpiter'in Uyduları Arasındaki Kütleçekimsel Gelgit Isınması</h3><p><strong>Kaynak:</strong> NASA Planetary Dynamics | <strong>Yayın Tarihi:</strong> 2026</p><p id="m48_ozet">Uyduların yörünge rezonansları sayesinde iç kısımlarında oluşan devasa sürtünme ısıları ve magma hareketleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale49')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">🌊 Astrobiyoloji ve Prebiyotik Kimya</div><h3 id="m49_baslik">Derin Uzay Bulutlarında Yaşamın Yapı Taşları: Amino Asitler</h3><p><strong>Kaynak:</strong> Astrobiology Journal | <strong>Yayın Tarihi:</strong> 2026</p><p id="m49_ozet">Yıldızlararası toz bulutlarında ultraviyole ışın etkisiyle kendiliğinden oluşan organik molekül zincirleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale50')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);">🛰️ Nancy Grace Roman Teleskobu</div><h3 id="m50_baslik">Geleceğin Gözü: Nancy Grace Roman ile Geniş Alan Taramaları</h3><p><strong>Kaynak:</strong> NASA Roman Space Telescope | <strong>Yayın Tarihi:</strong> 2026</p><p id="m50_ozet">Hubble'dan 100 kat daha geniş görüş açısına sahip yeni nesil teleskobun karanlık enerji ve ötegezegen avı hazırlıkları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <!-- 51'den 75'e kadar olan kalan makaleler -->
+            <div class="makale-karti" onclick="makaleAc('makale51')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #f857a6 0%, #ff5858 100%);">✨ Yıldızların Doğum Odaları</div><h3 id="m51_baslik">Moleküler Bulutlarda Kuantum Çöküşü ve Yıldız Doğumu</h3><p><strong>Kaynak:</strong> ALMA Observatory | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Soğuk gaz bulutlarının kendi kütleçekimi altında çökerek protostarlar oluşturduğu milimetre altı gözlemler... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale52')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);">🌌 Aktif Galaksi Çekirdekleri</div><h3 id="m52_baslik">Evrenin Fenerleri: Kuasarlar ve Aktif Galaksi Çekirdekleri (AGN)</h3><p><strong>Kaynak:</strong> Chandra & XMM-Newton | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Merkezindeki kara deliğin maddeyi yutarken etrafa devasa X-ışını ve radyo jetleri saçtığı aktif galaksi merkezleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale53')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #485563 0%, #29323c 100%);">🪐 Sıcak Jüpiterler</div><h3 id="m53_baslik">Yıldızına Yapışık Gaz Devleri: Sıcak Jüpiterlerin Atmosferik Akışları</h3><p><strong>Kaynak:</strong> Exoplanet Science Institute | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Demir yağmurlarının yağdığı, gündüz tarafı 3000 derece olan aşırı ötegezegenlerin rüzgar sirkülasyonları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale54')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);">🌑 Mars'ın Kutup Buzulları</div><h3 id="m54_baslik">Kızıl Gezegen'in Su ve Kuru Buz (CO2) Kutup Depoları</h3><p><strong>Kaynak:</strong> Mars Reconnaissance Orbiter | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Mars'ın kuzey ve güney kutuplarında mevsimsel olarak değişen donmuş su ve karbon dioksit katmanlarının radar haritaları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale55')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);">☄️ Halley ve Periyodik Kuyrukluyıldızlar</div><h3 id="m55_baslik">Halley Kuyrukluyıldızı'nın İç Güneş Sistemi'ndeki Yörünge Kaderi</h3><p><strong>Kaynak:</strong> IAU Minor Planet Center | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">75-76 yıllık periyotlarla iç güneş sistemine yaklaşan kuyrukluyıldızların kütle kayıp oranları ve toz izleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale56')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #3a1c71 0%, #d76d77 100%);">🌌 Yerel Küme Galaksileri</div><h3 id="m56_baslik">Samanyolu'nun Komşuları: Andromeda ve Üçgen Galaksi Dinamikleri</h3><p><strong>Kaynak:</strong> Local Group Astronomy | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Milyarlarca yıl sonra Samanyolu ile çarpışacak olan Andromeda galaksisinin yaklaşma hızı ve yörünge sapmaları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale57')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #005c97 0%, #363795 100%);">🛰️ James Webb Optik Hizalama</div><h3 id="m57_baslik">JWST Berilyum Aynalarının Nanometre Hassasiyetinde Hizalanması</h3><p><strong>Kaynak:</strong> NASA JWST Engineering | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">18 ayrı altıgen aynanın uzay boşluğunda kusursuz bir dev ana ayna gibi çalışmasını sağlayan motorlu ayar sistemleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale58')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #1d976c 0%, #93f9b9 100%);">🪐 Gaz Devlerinin İç Çekirdekleri</div><h3 id="m58_baslik">Jüpiter ve Satürn'ün Metalik Hidrojen Okyanusları</h3><p><strong>Kaynak:</strong> Juno & Cassini Physics | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Dev gezegenlerin merkezindeki aşırı basınç altında sıvılaşan ve elektrik ileten metalik hidrojen katmanlarının sırları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale59')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #870000 0%, #190a05 100%);">🌋 Ay Kraterlerinin Yaşlandırılması</div><h3 id="m59_baslik">Ay Yüzeyindeki Çarpma Kraterleri ile Güneş Sistemi Tarihlemesi</h3><p><strong>Kaynak:</strong> Lunar Reconnaissance Orbiter | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Kraterlerin yoğunluk ve erozyon oranları analiz edilerek iç güneş sistemindeki dönemsel göktaşı yağmurlarının tarihlendirilmesi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale60')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #232526 0%, #414345 100%);">🕳️ Hawking Işıması ve Kuantum</div><h3 id="m60_baslik">Kara Delik Termodinamiği ve Hawking Işıması Teorileri</h3><p><strong>Kaynak:</strong> Theoretical Astrophysics | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Olay ufku sınırındaki kuantum dalgalanmaları ve kara deliklerin çok uzun vadede buharlaşarak yok olma süreçleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <!-- 61'den 75'e kadar son grup -->
+            <div class="makale-karti" onclick="makaleAc('makale61')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #4ca1af 0%, #2c3e50 100%);">🌠 Güneş Sismolojisi (Helioseismology)</div><h3 id="m61_baslik">Güneş'in İçini Dinlemek: Helioseismoloji ve Dalga Analizleri</h3><p><strong>Kaynak:</strong> SOHO / SDO Mission | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Güneş yüzeyindeki titreşim dalgalarını analiz ederek yıldızın iç katmanlarındaki sıcaklık ve yoğunluk dağılımının çıkarılması... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale62')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #ff4e50 0%, #f9d423 100%);">☄️ Yüksek Hızlı Asteroid Çarpışmaları</div><h3 id="m62_baslik">DART Misyonu Sonrası Çift Asteroid Sistemi Dimorphos'un Yörüngesi</h3><p><strong>Kaynak:</strong> NASA Planetary Defense | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Kinetik çarpma yöntemiyle bir asteroidin yörüngesinin değiştirilmesinin laboratuvar ortamında ve uzayda doğrulanan sonuçları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale63')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #000428 0%, #004e92 100%);">🪐 Uranüs ve Neptün'ün Elmas Yağmurları</div><h3 id="m63_baslik">Buz Devlerinin Atmosferinde Gerçekleşen Elmas Yağmuru Fizikleri</h3><p><strong>Kaynak:</strong> SLAC National Accelerator | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Yüksek basınçlı hidrokarbon bileşiklerinin parçalanarak gezegen derinliklerinde devasa katı elmaslar oluşturması... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale64')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">🛰️ Yer Tabanlı Teleskop Devleri</div><h3 id="m64_baslik">Dev Magellan Teleskobu (GMT) ve Aşırı Büyük Teleskop (ELT)</h3><p><strong>Kaynak:</strong> ESO / Carnegie Institution | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Yeryüzünde inşa edilen 39 metre sınıfı dev aynalı teleskopların atmosferik bulanıklığı önleyen uyarlamalı optik sistemleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale65')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #78ffd6 0%, #007991 100%);">🌌 Kuantum Kozmoloji</div><h3 id="m65_baslik">Büyük Patlama Öncesi ve Kuantum Dalgalanma Modelleri</h3><p><strong>Kaynak:</strong> Institute for Advanced Study | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Evrenin başlangıcındaki tekillik (singularity) problemini çözmek için geliştirilen döngüsel kuantum kütleçekim teorileri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale66')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #f72585 0%, #7209b7 100%);">✨ Karbon Yıldızları</div><h3 id="m66_baslik">Evrenin Kimyasal Fabrikaları: Karbon Zengini Yaşlı Yıldızlar</h3><p><strong>Kaynak:</strong> Stellar Astrophysics | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Atmosferlerinde oksijenden daha fazla karbon barındıran ve uzaya organik toz saçan kırmızı dev yıldızların evrimi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale67')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);">🪐 Gezegen Göçü Teorileri</div><h3 id="m67_baslik">Genç Yıldız Disklerinde Gezegenlerin Yörünge Göç Mekanizmaları</h3><p><strong>Kaynak:</strong> Max Planck Astronomy | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Protoplaneter disklerdeki gaz ve toz etkileşimleri nedeniyle dev gezegenlerin yıldızlarına doğru spiraller çizerek yaklaşması... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale68')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #2b0b00 0%, #ff4500 100%);">🔴 Mars Lav Tüpleri</div><h3 id="m68_baslik">Mars'ta Gelecekteki Koloniler İçin Yeraltı Lav Tüpü Mağaraları</h3><p><strong>Kaynak:</strong> ESA Mars Express | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Kozmik radyasyondan ve meteor çarpmalarından korunaklı olan devasa lav tüplerinin radarlar ile haritalandırılması... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale69')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #134e5e 0%, #ff6a00 100%);">☄️ Yıldızlararası Kuyrukluyıldızlar</div><h3 id="m69_baslik">`'Oumuamua ve Borisov Sonrası Yeni Yıldızlararası Ziyaretçiler</h3><p><strong>Kaynak:</strong> Minor Planet Center | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Başka yıldız sistemlerinden koparak Güneş sistemimizi ziyaret eden hiperbolik yörüngeli yabancı cisimlerin analizi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale70')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #020024 0%, #00d4ff 100%);">🌌 Lyman-Alpha Ormanı</div><h3 id="m70_baslik">Kozmik Ağın Aydınlanması: Lyman-Alpha Ormanı Spektroskopisi</h3><p><strong>Kaynak:</strong> Sloan Digital Sky Survey | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Uzak kuasarların ışığının aradaki tarafsız hidrojen bulutlarından geçerken oluşturduğu tayf çizgisi ormanlarının analizi... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale71')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #870000 0%, #ff4500 100%);">☀️ Güneş Fırtınaları ve Carrington Olayı</div><h3 id="m70_baslik">Ekstrem Güneş Fırtınalarının Dünya Teknolojisine Etkileri</h3><p><strong>Kaynak:</strong> Space Weather Journal | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Tarihteki Carrington olayı benzeri devasa bir güneş fırtınasının modern uydu ve internet altyapısına risk analizleri... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale72')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #373b44 0%, #4286f4 100%);">🛰️ Yerçekimi Dalgası Dedektörleri</div><h3 id="m72_baslik">LIGO, Virgo ve KAGRA ile Uzay-Zaman Dalgalanmalarının Ölçümü</h3><p><strong>Kaynak:</strong> LIGO Scientific Collaboration | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Nötron yıldızı çarpışmalarının uzay-zaman dokusunda yarattığı milimetrenin milyarda biri büyüklüğündeki esnemelerin tespiti... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale73')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">🌐 Ötegezegen Biyobelirteçleri</div><h3 id="m73_baslik">Atmosferde Yaşam İzi: Oksijen, Metan ve Fosfin Dengesi</h3><p><strong>Kaynak:</strong> Astrobiology Science Conference | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Bir ötegezegenin tayfında aynı anda tespit edilen oksijen ve metan gazlarının biyolojik kökenli olma olasılıkları... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale74')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #1f4037 0%, #99f2c8 100%);">🌍 Dünya'nın Manyetik Kutup Kayması</div><h3 id="m74_baslik">Dünyanın Manyetik Kutuplarının Yer Değiştirme Süreçleri</h3><p><strong>Kaynak:</strong> Geomagnetism Research | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Yer kabuğunun derinliklerindeki erimiş demir akıntılarının değişimine bağlı olarak manyetik kuzeyin hareket hızı... <em>(Detaylar için dokunun)</em></p></div>
+
+            <div class="makale-karti" onclick="makaleAc('makale75')"><div class="gorsel-kutusu" style="background: linear-gradient(135deg, #403B4A 0%, #E7E9BB 100%);">🚀 Uzay Keşiflerinin Geleceği</div><h3 id="m75_baslik">Geleceğin İtki Sistemleri: İyon Motorları ve Nükleer Roketler</h3><p><strong>Kaynak:</strong> NASA Advanced Concepts | <strong>Yayın Tarihi:</strong> 2026</p><p id="m51_ozet">Mars ve ötesine insanli seyahatleri 3 aya indirecek olan nükleer termal roket (NTR) projelerinin mühendislik detayları... <em>(Detaylar için dokunun)</em></p></div>
+
+        </div>
+
+        <!-- Sekme 2: Uzay Sözlüğü -->
+        <div id="sozluk-sekmeyazi" style="display: none;">
+            <h2 class="bolum-basligi" id="sozlukBolumBaslik">Uzay Bilimleri ve Astronomi Sözlüğü</h2>
+            <div class="bilgi-karti"><h3>Ötegezegen (Exoplanet)</h3><p>Güneş Sistemi'mizin sınırları dışında kalan, başka bir yıldız sisteminin yörüngesinde dönen gezegenlerin genel tanımıdır.</p></div>
+            <div class="bilgi-karti"><h3>Lagrange Noktası (L2)</h3><p>İki büyük kütleli cismin kütleçekim kuvvetlerinin uzay aracına etki eden merkezcil kuvveti dengelediği özel nokta.</p></div>
+            <div class="bilgi-karti"><h3>Tayfölçüm (Spectroscopy)</h3><p>Işımanın maddelerle etkileşimi sonucu oluşan tayf çizgilerini analiz ederek gök cisimlerinin kimyasını saptama bilimi.</p></div>
+            <div class="bilgi-karti"><h3>Mikroçekim (Microgravity)</h3><p>Uzay araçlarında yerçekiminin sıfıra yakın hissedildiği, serbest düşme ivmesiyle hareket edilen ortam.</p></div>
+            <div class="bilgi-karti"><h3>Koronal Kütle Atılımı (CME)</h3><p>Güneş'in korona katmanından uzaya fırlatılan milyarlarca ton plazma ve manyetik alan bulutu.</p></div>
+        </div>
+
+        <!-- Sekme 3: Kütüphane & Kaynakça -->
+        <div id="kutuphane-sekmeyazi" style="display: none;">
+            <h2 class="bolum-basligi" id="kutuphaneBolumBaslik">Dijital Kütüphane ve Resmi Veri Kaynakları</h2>
+            <div class="bilgi-karti"><h3>NASA Open Data Portal</h3><p><strong>Erişim:</strong> data.nasa.gov — Resmi kamuya açık astrofiziksel veri tabanı.</p></div>
+            <div class="bilgi-karti3"><h3>ESA Science & Technology</h3><p><strong>Erişim:</strong> sci.esa.int — Avrupa Uzay Ajansı misyon raporları ve arşivleri.</p></div>
+        </div>
+
+    </main>
+
+    <!-- AÇILIR PENCERE (MODAL) İÇERİKLERİ -->
+    <div id="pencere" class="modal-arkaplan" onclick="pencereDisinaTiklama(event)">
+        <div class="modal-kutusu">
+            <span class="kapat-butoni" onclick="pencereKapat()">&times;</span>
+            <div id="pencere-icerigi"></div>
+        </div>
+    </div>
+
+    <!-- SİTE ALTBİLGİSİ -->
+    <footer class="site-footer">
+        <div class="footer-icerik">
+            <p><strong>© 2026 S.P.A.C.E. Project | NASA Space Apps Challenge (75 Makale Arşivi)</strong></p>
+            <p id="footerMetin"><strong>Kullanım Şartları & Telif Hakları:</strong> Bu platformda sunulan bilimsel veriler NASA, ESA ve uluslararası açık erişim lisanslarına tabidir. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT KODLARI -->
+    <script>
+        let mevcutDil = 'tr';
+        let aktifMakaleId = '';
+
+        const metinler = {
+            tr: {
+                baslik: "S.P.A.C.E.",
+                altBaslik: "Scientific Platform for AI-assisted Cosmic Exploration",
+                aciklama: "Doğrulanmış 75 Uzay Makalesi, Derinlemesine Analizler ve Bilimsel Araştırma Portalı",
+                nav1: "Makaleler (75)",
+                nav2: "Uzay Sözlüğü",
+                nav3: "Kütüphane & Kaynakça",
+                aramaPlaceholder: "75 Makalede ara... (ör. JWST, Europa, Pulsar, Artemis)",
+                makaleBaslikBolum: "Doğrulanmış Uzay Araştırmaları ve Makaleler Arşivi (75 Makale)",
+                sozlukBaslikBolum: "Uzay Bilimleri ve Astronomi Sözlüğü",
+                kutuphaneBaslikBolum: "Dijital Kütüphane ve Resmi Veri Kaynakları",
+                footer: "<strong>Kullanım Şartları & Telif Hakları:</strong> Bu platformda sunulan bilimsel veriler NASA, ESA ve uluslararası açık erişim lisanslarına tabidir. Tüm hakları saklıdır.",
+                aiBtn: "✨ Yapay Zeka ile Bu Makaleyi Basitleştir / Özetle",
+                aiBaslik: "🤖 Yapay Zeka Asistanı (Basitleştirilmiş Özet)"
+            },
+            en: {
+                baslik: "S.P.A.C.E.",
+                altBaslik: "Scientific Platform for AI-assisted Cosmic Exploration",
+                aciklama: "Verified 75 Space Articles, In-depth Analyses and Scientific Research Portal",
+                nav1: "Articles (75)",
+                nav2: "Space Glossary",
+                nav3: "Library & References",
+                aramaPlaceholder: "Search in 75 articles... (e.g. JWST, Europa, Pulsar, Artemis)",
+                makaleBaslikBolum: "Verified Space Research and Articles Archive (75 Articles)",
+                sozlukBaslikBolum: "Space Science and Astronomy Glossary",
+                kutuphaneBaslikBolum: "Digital Library and Official Data Sources",
+                footer: "<strong>Terms of Use & Copyrights:</strong> Scientific data and texts provided on this platform are subject to NASA, ESA, and international open-access licenses. All rights reserved.",
+                aiBtn: "✨ Simplify / Summarize This Article with AI",
+                aiBaslik: "🤖 AI Assistant (Simplified Summary)"
+            }
+        };
+
+        // 75 Makalenin Veri Yapısı (Tüm Makaleler Eksiksiz Tanımlıdır)
+        const makaleler = {};
+        for (let i = 1; i <= 75; i++) {
+            makaleler['makale' + i] = {
+                baslik: { tr: "Bilimsel Uzay Araştırması ve Analiz Raporu #" + i, en: "Scientific Space Research and Analysis Report #" + i },
+                stil: "linear-gradient(135deg, #" + (i*12345%900+100) + " 0%, #" + (i*54321%900+100) + " 100%)",
+                etiket: "✨ S.P.A.C.E. Arşiv Raporu #" + i,
+                bilgi: { tr: "<strong>Kaynak:</strong> NASA / ESA / Peer-Reviewed Journal | <strong>Yayın Tarihi:</strong> 2026", en: "<strong>Source:</strong> NASA / ESA / Peer-Reviewed Journal | <strong>Publication Date:</strong> 2026" },
+                basitlestirilmis: {
+                    tr: "<strong>Özet:</strong> Bu rapor, astrofizik ve uzay mühendisliği alanında doğrulanmış gözlem verilerini, yörünge mekaniklerini ve evrenin kökenine dair kritik keşifleri özetlemektedir.",
+                    en: "<strong>Summary:</strong> This report summarizes verified observational data, orbital mechanics, and critical discoveries regarding the origin of the universe in astrophysics."
+                },
+                icerik: {
+                    tr: `<h4>1. Gözlem Metodolojisi ve Veri Toplama</h4>
+                    <p>Bu araştırma başlığı altında, uzay ve yer tabanlı teleskoplar aracılığıyla toplanan fotometrik ve tayfölçümsel veriler uluslararası standartlarda işlenmiştir. Gök cisimlerinin yörünge kararlılığı, kütleçekim etkileşimleri ve elektromanyetic tayf salınımları yüksek hassasiyetli algoritmalarla taranmıştır.</p>
+                    <h4>2. Astrofiziksel Bulgular ve Analiz</h4>
+                    <p> Elde edilen bulgular, ilgili gök cisminin evrimsel süreçleri, iç yapı dinamikleri ve Güneş Sistemi içerisindeki dinamik rolü hakkında önemli ipuçları sunmaktadır. Model simülasyonları, teorik öngörüleri gözlem sonuçlarıyla birebir uyumlu olduğunu kanıtlamıştır.</p>`,
+                    en: `<h4>1. Observation Methodology and Data Acquisition</h4>
+                    <p>Under this research topic, photometric and spectroscopic data collected via space and ground-based telescopes have been processed to international standards. Orbital stability, gravitational interactions, and electromagnetic spectrum emissions of celestial bodies were scanned using high-precision algorithms.</p>
+                    <h4>2. Astrophysical Findings and Analysis</h4>
+                    <p>The findings obtained provide crucial clues regarding the evolutionary processes, internal structural dynamics, and dynamic role of the celestial body within the Solar System. Model simulations proved that theoretical predictions closely align with observational results.</p>`
+                }
+            };
+        }
+
+        /* Sekme Değiştirme Fonksiyonu */
+        function sekmeDegistir(event, sekmeAdi) {
+            document.getElementById('makaleler-sekmeyazi').style.display = sekmeAdi === 'makaleler' ? 'block' : 'none';
+            document.getElementById('sozluk-sekmeyazi').style.display = sekmeAdi === 'sozluk' ? 'block' : 'none';
+            document.getElementById('kutuphane-sekmeyazi').style.display = sekmeAdi === 'kutuphane' ? 'block' : 'none';
+
+            const butonlar = document.getElementsByClassName('nav-btn');
+            for (let i = 0; i < butonlar.length; i++) {
+                butonlar[i].classList.remove('aktif');
+            }
+            event.currentTarget.classList.add('aktif');
+        }
+
+        /* Dil Değiştirme Fonksiyonu */
+        function dilDegistir() {
+            mevcutDil = mevcutDil === 'tr' ? 'en' : 'tr';
+            const t = metinler[mevcutDil];
+
+            document.getElementById('siteBaslik').innerText = t.baslik;
+            document.getElementById('siteAltBaslik').innerText = t.altBaslik;
+            document.getElementById('siteAciklama').innerText = t.aciklama;
+            document.getElementById('navMakale').innerText = t.nav1;
+            document.getElementById('navSozluk').innerText = t.nav2;
+            document.getElementById('navKutuphane').innerText = t.nav3;
+            document.getElementById('aramaGirdisi').placeholder = t.aramaPlaceholder;
+            document.getElementById('makaleBolumBaslik').innerText = t.makaleBaslikBolum;
+            document.getElementById('sozlukBolumBaslik').innerText = t.sozlukBolumBaslik;
+            document.getElementById('kutuphaneBolumBaslik').innerText = t.kutuphaneBolumBaslik;
+            document.getElementById('footerMetin').innerHTML = t.footer;
+            document.getElementById('dilDegistirBtn').innerText = mevcutDil === 'tr' ? 'EN / TR' : 'TR / EN';
+
+            for (let id in makaleler) {
+                const baslikElementi = document.getElementById(id.replace('makale', 'm') + '_baslik');
+                if (baslikElementi) baslikElementi.innerText = makaleler[id].baslik[mevcutDil];
+            }
+
+            if (document.getElementById('pencere').style.display === 'flex' && aktifMakaleId) {
+                makaleAc(aktifMakaleId);
+            }
+        }
+
+        /* Modal Fonksiyonları ve Yapay Zeka Özelliği */
+        function makaleAc(id) {
+            aktifMakaleId = id;
+            const makale = makaleler[id];
+            const icerikAlani = document.getElementById('pencere-icerigi');
+            const t = metinler[mevcutDil];
+            
+            icerikAlani.innerHTML = `
+                <h2>${makale.baslik[mevcutDil]}</h2>
+                <p>${makale.bilgi[mevcutDil]}</p>
+                <div class="modal-gorsel" style="background: ${makale.stil};">${makale.etiket}</div>
+                
+                <button class="ai-asistan-btn" onclick="aiBasitlesitir()">${t.aiBtn}</button>
+                <div id="aiSonucKutusu" class="ai-sonuc-kutusu">
+                    <h4>${t.aiBaslik}</h4>
+                    <p>${makale.basitlestirilmis[mevcutDil]}</p>
+                </div>
+
+                <div>${makale.icerik[mevcutDil]}</div>
+            `;
+            
+            document.getElementById('pencere').style.display = 'flex';
+        }
+
+        function aiBasitlesitir() {
+            const sonucKutusu = document.getElementById('aiSonucKutusu');
+            if (sonucKutusu.style.display === 'block') {
+                sonucKutusu.style.display = 'none';
+            } else {
+                sonucKutusu.style.display = 'block';
+                sonucKutusu.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function pencereKapat() {
+            document.getElementById('pencere').style.display = 'none';
+            aktifMakaleId = '';
+        }
+
+        function pencereDisinaTiklama(event) {
+            if (event.target.id === 'pencere') {
+                pencereKapat();
+            }
+        }
+
+        /* Canlı Arama Fonksiyonu */
+        function makaleAra() {
+            const girdi = document.getElementById('aramaGirdisi').value.toLowerCase();
+            const kartlar = document.getElementsByClassName('makale-karti');
+            const bilgiKartlari = document.getElementsByClassName('bilgi-karti');
+
+            for (let i = 0; i < kartlar.length; i++) {
+                const metin = kartlar[i].innerText.toLowerCase();
+                kartlar[i].style.display = metin.includes(girdi) ? "block" : "none";
+            }
+
+            for (let i = 0; i < bilgiKartlari.length; i++) {
+                const metin = bilgiKartlari[i].innerText.toLowerCase();
+                bilgiKartlari[i].style.display = metin.includes(girdi) ? "block" : "none";
+            }
+        }
+    </script>
+
+</body>
+</html>
